@@ -37,7 +37,7 @@ public class JpaMain {
             member.setName("AAAA");
 
 //            em.detach(member);
-            em.clear();
+//            em.clear();
 //            em.close();
 
             Member member2 = em.find(Member.class, 150L);
@@ -50,9 +50,6 @@ public class JpaMain {
 //            em.flush();
 //
 //            System.out.println("============");
-
-
-
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
