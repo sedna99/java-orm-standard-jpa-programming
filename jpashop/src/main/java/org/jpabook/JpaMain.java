@@ -3,6 +3,7 @@ package org.jpabook;
 import jakarta.persistence.*;
 import org.jpabook.jpashop.Member;
 import org.jpabook.jpashop.Order;
+import org.jpabook.jpashop.OrderItem;
 
 import java.util.List;
 
@@ -14,10 +15,13 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Order order = em.find(Order.class, 1L);
-            Long memberId = order.getMemberId();
 
-            Member orderedMember = em.find(Member.class, memberId);
+             Order order = new Order();
+             order.addOrderItem(new OrderItem());
+//             Order order = em.find(Order.class, 1L);
+
+
+//            Member orderedMember = em.find(Member.class, memberId);
 //
 
             tx.commit();
