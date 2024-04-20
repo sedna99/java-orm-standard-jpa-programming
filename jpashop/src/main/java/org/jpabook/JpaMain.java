@@ -18,11 +18,6 @@ public class JpaMain {
 
              Order order = new Order();
              order.addOrderItem(new OrderItem());
-//             Order order = em.find(Order.class, 1L);
-
-
-//            Member orderedMember = em.find(Member.class, memberId);
-//
 
             tx.commit();
         } catch (Exception e) {
