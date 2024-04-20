@@ -2,6 +2,8 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -13,21 +15,10 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Movie movie = new Movie();
-            movie.setDirector("AAAA");
-            movie.setActor("BBBB");
-            movie.setName("바람과 함꼐 사라지다");
-            movie.setPrice(10000);
-
-            em.persist(movie);
-
-            em.flush();
-            em.clear();
-
-            Movie foundMovie = em.find(Movie.class, movie.getId());
-            System.out.println(movie.getId());
-            System.out.println("===========");
-            System.out.println("foundMovie = " + foundMovie);
+            Member member = new Member();
+            member.setCreatedBy("kim");
+            member.setUsername("super");
+            member.setCreatedDate(LocalDateTime.now());
 
             tx.commit();
         } catch (Exception e) {
