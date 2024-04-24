@@ -15,45 +15,27 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Parent parent = new Parent();
+            parent.setName("parent");
 
-            Team team2 = new Team();
-            team2.setName("teamB");
-            em.persist(team2);
+            Child child1 = new Child();
+            child1.setName("child1");
+            Child child2 = new Child();
+            child2.setName("child2");
 
-            Member member1 = new Member();
-            member1.setCreatedBy("kim");
-            member1.setUsername("member1");
-            member1.setCreatedDate(LocalDateTime.now());
-            member1.setTeam(team);
-            em.persist(member1);
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Member member2 = new Member();
-            member2.setCreatedBy("kim");
-            member2.setUsername("member2");
-            member2.setCreatedDate(LocalDateTime.now());
-            member2.setTeam(team2);
-            em.persist(member2);
+            em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
 
             em.flush();
             em.clear();
 
-            Member foundMember = em.find(Member.class, member1.getId());
-            System.out.println("findMember1 = " + foundMember.getClass());
-            Team foundTeam = foundMember.getTeam();
-            System.out.println("foundTeam = " + foundTeam.getClass());
-            System.out.println("teamName = " + foundTeam.getName());
+            Parent findParent = em.find(Parent.class, parent.getId());
 
-            em.flush();
-            em.clear();
-
-            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class)
-                    .getResultList();
-            for(Member m : members) {
-                System.out.println("member = " + m.getUsername() + ", " + m.getTeam().getName());
-            }
+            em.remove(findParent);
 
             tx.commit();
         } catch (Exception e) {
