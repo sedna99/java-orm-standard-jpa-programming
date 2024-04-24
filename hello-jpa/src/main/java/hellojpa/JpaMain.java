@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class JpaMain {
 
@@ -18,6 +19,10 @@ public class JpaMain {
             team.setName("teamA");
             em.persist(team);
 
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
+
             Member member1 = new Member();
             member1.setCreatedBy("kim");
             member1.setUsername("member1");
@@ -29,14 +34,26 @@ public class JpaMain {
             member2.setCreatedBy("kim");
             member2.setUsername("member2");
             member2.setCreatedDate(LocalDateTime.now());
+            member2.setTeam(team2);
             em.persist(member2);
 
             em.flush();
             em.clear();
 
-            Member findMember1 = em.find(Member.class, member1.getId());
-            Team foundTeam = findMember1.getTeam();
+            Member foundMember = em.find(Member.class, member1.getId());
+            System.out.println("findMember1 = " + foundMember.getClass());
+            Team foundTeam = foundMember.getTeam();
             System.out.println("foundTeam = " + foundTeam.getClass());
+            System.out.println("teamName = " + foundTeam.getName());
+
+            em.flush();
+            em.clear();
+
+            List<Member> members = em.createQuery("select m from Member m join fetch m.team", Member.class)
+                    .getResultList();
+            for(Member m : members) {
+                System.out.println("member = " + m.getUsername() + ", " + m.getTeam().getName());
+            }
 
             tx.commit();
         } catch (Exception e) {
