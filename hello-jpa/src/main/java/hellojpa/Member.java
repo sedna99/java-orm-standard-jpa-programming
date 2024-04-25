@@ -17,20 +17,7 @@ public class Member{
     private Period workPeriod;
 
     @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(name = "HOME_CITY")),
-            @AttributeOverride(name = "street", column = @Column(name = "HOME_STREET")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "HOME_ZIPCODE"))
-    })
     private Address homeAddress;
-
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "city", column = @Column(name = "WORK_CITY")),
-            @AttributeOverride(name = "street", column = @Column(name = "WORK_STREET")),
-            @AttributeOverride(name = "zipcode", column = @Column(name = "WORK_ZIPCODE"))
-    })
-    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -70,13 +57,5 @@ public class Member{
 
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = homeAddress;
-    }
-
-    public Address getWorkAddress() {
-        return workAddress;
-    }
-
-    public void setWorkAddress(Address workAddress) {
-        this.workAddress = workAddress;
     }
 }
