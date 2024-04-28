@@ -1,8 +1,6 @@
 package org.hellojpa;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Member {
@@ -13,6 +11,8 @@ public class Member {
 
     private String username;
     private int age;
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
     private Team team;
 
     public Long getId() {
