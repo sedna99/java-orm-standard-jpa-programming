@@ -18,18 +18,34 @@ public class Main {
 
             em.persist(member);
 
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-            List<Member> resultList = query1.getResultList();
+            em.flush();
+            em.clear();
 
-            TypedQuery<Member> query2 = em.createQuery("select m from Member m where m.id = :id", Member.class);
-            query2.setParameter("id", member.getId());
-            Member result = query2.getSingleResult();
+            List resultList = em.createQuery("select distinct m.username, m.age from Member m")
+                    .getResultList();
 
-            System.out.println("result = " + result.getUsername());
+            List<Object[]> resultList2 = em.createQuery("select distinct m.username, m.age from Member m")
+                    .getResultList();
 
-            TypedQuery<String> query3 = em.createQuery("select m.username from Member m", String.class);
+            List<MemberDTO> resultList3 = em.createQuery("select new org.hellojpa.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+                    .getResultList();
 
-            Query query4 = em.createQuery("select m.username, m.age from Member m");
+            for(Object o : resultList) {
+                Object[] result = (Object[]) o;
+                System.out.println("username = " + result[0]);
+                System.out.println("age = " + result[1]);
+            }
+
+            for(Object[] result : resultList2) {
+                System.out.println("username = " + result[0]);
+                System.out.println("age = " + result[1]);
+            }
+
+            for(MemberDTO memberDTO : resultList3) {
+                System.out.println("memberDTO = " + memberDTO);
+                System.out.println("username = " + memberDTO.getUsername());
+                System.out.println("age = " + memberDTO.getAge());
+            }
 
 
             tx.commit();
