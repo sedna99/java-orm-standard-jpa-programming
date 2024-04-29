@@ -25,26 +25,9 @@ public class Main {
             em.flush();
             em.clear();
 
-            String query = "select m from Member m left join m.team t";
-            List<Member> result = em.createQuery(query, Member.class).getResultList();
-
-            System.out.println("results.size() = " + result.size());
-
-            String query2 = "select m from Member m, Team t where m.username = t.name";
-            List<Member> result2 = em.createQuery(query2, Member.class).getResultList();
-
-            System.out.println("results2.size() = " + result2.size());
-
-            String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
-            List<Member> result3 = em.createQuery(query3, Member.class).getResultList();
-
-            System.out.println("results3.size() = " + result3.size());
-
-            String query4 = "select m from Member m left join Team t on m.username = t.name";
-            List<Member> result4 = em.createQuery(query4, Member.class).getResultList();
-
-            System.out.println("results4.size() = " + result4.size());
-
+            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m";
+            List<Double> result = em.createQuery(query).getResultList();
+            result.forEach(System.out::println);
 
             tx.commit();
         } catch (Exception e) {
