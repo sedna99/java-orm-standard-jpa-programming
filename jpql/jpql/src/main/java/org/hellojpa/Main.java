@@ -12,41 +12,26 @@ public class Main {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-
-            em.persist(member);
+            for (int i = 0; i < 100; i++)
+            {
+                Member member = new Member();
+                member.setUsername("member" + i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             em.flush();
             em.clear();
 
-            List resultList = em.createQuery("select distinct m.username, m.age from Member m")
+            List<Member> results = em.createQuery("select m from Member m order by m.age desc", Member.class)
+                    .setFirstResult(1)
+                    .setMaxResults(10)
                     .getResultList();
 
-            List<Object[]> resultList2 = em.createQuery("select distinct m.username, m.age from Member m")
-                    .getResultList();
-
-            List<MemberDTO> resultList3 = em.createQuery("select new org.hellojpa.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
-                    .getResultList();
-
-            for(Object o : resultList) {
-                Object[] result = (Object[]) o;
-                System.out.println("username = " + result[0]);
-                System.out.println("age = " + result[1]);
+            System.out.println("results.size() = " + results.size());
+            for (Member m : results) {
+                System.out.println("member = " + m);
             }
-
-            for(Object[] result : resultList2) {
-                System.out.println("username = " + result[0]);
-                System.out.println("age = " + result[1]);
-            }
-
-            for(MemberDTO memberDTO : resultList3) {
-                System.out.println("memberDTO = " + memberDTO);
-                System.out.println("username = " + memberDTO.getUsername());
-                System.out.println("age = " + memberDTO.getAge());
-            }
-
 
             tx.commit();
         } catch (Exception e) {
