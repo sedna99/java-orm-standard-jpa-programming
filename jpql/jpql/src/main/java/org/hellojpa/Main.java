@@ -20,14 +20,29 @@ public class Main {
             member.setUsername("teamA");
             member.setAge(10);
             member.setTeam(team);
+            member.setMemberType(MemberType.USER);
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m";
-            List<Double> result = em.createQuery(query).getResultList();
-            result.forEach(System.out::println);
+            String query = "select m.username, 'HELLO', TRUE from Member m where m.memberType = org.hellojpa.MemberType.USER";
+            List<Object[]> result = em.createQuery(query).getResultList();
+            System.out.println("result.size() = " + result.size());
+            for(Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
+
+            String query2 = "select m.username, 'HELLO', TRUE from Member m where m.memberType = :userType";
+            List<Object[]> result2 = em.createQuery(query2).setParameter("userType", MemberType.USER).getResultList();
+            System.out.println("result2.size() = " + result2.size());
+            for(Object[] objects : result2) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e) {
