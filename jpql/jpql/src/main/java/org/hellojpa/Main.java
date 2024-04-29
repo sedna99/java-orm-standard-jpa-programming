@@ -12,26 +12,39 @@ public class Main {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
-            for (int i = 0; i < 100; i++)
-            {
-                Member member = new Member();
-                member.setUsername("member" + i);
-                member.setAge(i);
-                em.persist(member);
-            }
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("teamA");
+            member.setAge(10);
+            member.setTeam(team);
+            em.persist(member);
 
             em.flush();
             em.clear();
 
-            List<Member> results = em.createQuery("select m from Member m order by m.age desc", Member.class)
-                    .setFirstResult(1)
-                    .setMaxResults(10)
-                    .getResultList();
+            String query = "select m from Member m left join m.team t";
+            List<Member> result = em.createQuery(query, Member.class).getResultList();
 
-            System.out.println("results.size() = " + results.size());
-            for (Member m : results) {
-                System.out.println("member = " + m);
-            }
+            System.out.println("results.size() = " + result.size());
+
+            String query2 = "select m from Member m, Team t where m.username = t.name";
+            List<Member> result2 = em.createQuery(query2, Member.class).getResultList();
+
+            System.out.println("results2.size() = " + result2.size());
+
+            String query3 = "select m from Member m left join m.team t on t.name = 'teamA'";
+            List<Member> result3 = em.createQuery(query3, Member.class).getResultList();
+
+            System.out.println("results3.size() = " + result3.size());
+
+            String query4 = "select m from Member m left join Team t on m.username = t.name";
+            List<Member> result4 = em.createQuery(query4, Member.class).getResultList();
+
+            System.out.println("results4.size() = " + result4.size());
+
 
             tx.commit();
         } catch (Exception e) {
