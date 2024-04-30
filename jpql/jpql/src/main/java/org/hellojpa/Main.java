@@ -81,13 +81,6 @@ public class Main {
                 System.out.println("s = " + s);
             }
 
-//            index()는 값 컬렉션의 인덱스를 조회할 때 사용
-//            String query9 = "select index(t.members) from Team t";
-//            List<Integer> result9 = em.createQuery(query9, Integer.class).getResultList();
-//            for (Integer s : result9) {
-//                System.out.println("s = " + s);
-//            }
-
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
