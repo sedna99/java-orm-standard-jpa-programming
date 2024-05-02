@@ -46,8 +46,10 @@ public class Main {
             em.flush();
             em.clear();
 
-            String query = "select t from Team t join fetch t.members";
+            String query = "select t From Team t";
             List<Team> teams = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
                     .getResultList();
 
             for (Team team1 : teams) {
