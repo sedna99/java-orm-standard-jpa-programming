@@ -43,12 +43,17 @@ public class Main {
 
             em.persist(member3);
 
-            em.flush();
+//            em.flush();
+//            em.clear();
+
+            int resultCount = em.createQuery("update Member m set m.age = 20")
+                    .executeUpdate();
+
             em.clear();
 
-            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
-                    .setParameter("username", "회원1")
-                    .getResultList();
+            Member foundMember = em.find(Member.class, member1.getId());
+
+            System.out.println("foundMember = " + foundMember.getAge());
 
             tx.commit();
         } catch (Exception e) {
