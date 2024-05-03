@@ -46,16 +46,9 @@ public class Main {
             em.flush();
             em.clear();
 
-//            String query = "select m from Member m where m.id = :memberId";
-//            String query = "select m from Member m where m.team.id = :teamId";
-            String query = "select m from Member m where m.team = :team";
-            List foundMembers = em.createQuery(query, List.class)
-                    .setParameter("team", team)
+            List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
+                    .setParameter("username", "회원1")
                     .getResultList();
-
-            for (Object o : foundMembers) {
-                System.out.println("o = " + o);
-            }
 
             tx.commit();
         } catch (Exception e) {
